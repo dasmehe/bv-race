@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=3 uid="uid://ct75ekn8oxfuf"]
+
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_0nfoe"]
+[ext_resource type="Texture2D" uid="uid://dn7f0bgri1g76" path="res://sprites/proto.png" id="2_5brc0"]
+[ext_resource type="Texture2D" uid="uid://c15k3smar1pcf" path="res://sprites/animations.png" id="3_ji42r"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tmqbl"]
+radius = 23.0
+height = 76.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j5ty1"]
+atlas = ExtResource("2_5brc0")
+region = Rect2(0, 0, 200, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v5w1a"]
+atlas = ExtResource("3_ji42r")
+region = Rect2(0, 0, 275, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b6mh1"]
+atlas = ExtResource("3_ji42r")
+region = Rect2(260, 0, 260, 200)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0ktnh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j5ty1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_v5w1a")
+}, {
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_b6mh1")
+}],
+"loop": true,
+"name": &"shooting",
+"speed": 2.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d372i"]
+size = Vector2(173.5, 37)
+
+[node name="main" type="Node2D"]
+
+[node name="player" type="CharacterBody2D" parent="."]
+position = Vector2(105, 156)
+script = ExtResource("1_0nfoe")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="player"]
+position = Vector2(168, 363)
+shape = SubResource("CapsuleShape2D_tmqbl")
+
+[node name="playerSprite" type="AnimatedSprite2D" parent="player"]
+position = Vector2(168, 363)
+scale = Vector2(0.41, 0.414227)
+sprite_frames = SubResource("SpriteFrames_0ktnh")
+animation = &"shooting"
+autoplay = "default"
+frame = 1
+frame_progress = 0.225461
+
+[node name="Area2D" type="Area2D" parent="player"]
+position = Vector2(264, 368)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="player/Area2D"]
+position = Vector2(3, 0)
+shape = SubResource("RectangleShape2D_d372i")
+
+[connection signal="animation_looped" from="player/playerSprite" to="player" method="_on_player_sprite_animation_looped"]
